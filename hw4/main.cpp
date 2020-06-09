@@ -161,11 +161,11 @@ int main() {
    xbee.printf("ATMY 0x240\r\n");
    reply_messange(xbee_reply, "setting MY : 0x240");
 
-   xbee.printf("ATDL 0x0\r\n");
-   reply_messange(xbee_reply, "setting DL : 0x0");
+   xbee.printf("ATDL 0x140\r\n");
+   reply_messange(xbee_reply, "setting DL : 0x140");
 
-   xbee.printf("ATID 0x4041\r\n");
-   reply_messange(xbee_reply, "setting PAN ID : 0x4041");
+   xbee.printf("ATID 0x1\r\n");
+   reply_messange(xbee_reply, "setting PAN ID : 0x1");
 
    xbee.printf("ATWR\r\n");
    reply_messange(xbee_reply, "write config");

@@ -1,20 +1,12 @@
 import paho.mqtt.client as paho
-
 import string as string1
-
 import locale
-
 import matplotlib.pyplot as plt
-
 import numpy as np
-
 import serial
-
 import time
 
-
 # https://os.mbed.com/teams/mqtt/wiki/Using-MQTT#python-client
-
 # MQTT broker hosted on local machine
 mqttc = paho.Client()
 
@@ -26,7 +18,7 @@ topic= "Mbed"
 x = []
 y = []
 z = []
-sample_time=[]
+sample=[]
 # Callbacks
 def on_connect(self, mosq, obj, rc):
     print("Connected rc: " + str(rc))
@@ -36,14 +28,13 @@ def on_message(mosq, obj, msg):
     global y
     global z
     global tstart
-    global sample_time
+    global sample
     print("[Received] Topic: " + msg.topic + ", Message: " + msg.payload.decode("UTF-8") + "\n")
     x.append(locale.atof(msg.payload[0:6].decode("UTF-8")))
     y.append(locale.atof(msg.payload[7:13].decode("UTF-8")))
     z.append(locale.atof(msg.payload[14:20].decode("UTF-8")))
     y_time=time.time()
-    sample_time.append(y_time-tstart)
-
+    sample.append(y_time-tstart)
 
 def on_subscribe(mosq, obj, mid, granted_qos):
     print("Subscribed OK")
@@ -68,37 +59,21 @@ mqttc.connect(host, port=1883, keepalive=60)
 mqttc.subscribe(topic, 0)
 
 # Loop forever, receiving messages
-tstart=time.time()
+tstart = time.time()
 mqttc.loop_start()
-tend=time.time()
+tend = time.time()
 while tend-tstart<=20:
-    tend=time.time()
-#    xz=locale.atof(xj)
-#    x.append(xz)
-#    x.append(m)
-number=0
-#for j in (x):
-#    x[number]=locale.atof(j)
-#    number = number +1
-#print(x)
+    tend = time.time()
+
 mqttc.loop_stop()
 
 fig, ax = plt.subplots(1, 1)
-
-l1,=ax.plot(sample_time,x)
-
-l2,=ax.plot(sample_time,y)
-
-l3,=ax.plot(sample_time,z)
-
+l1,=ax.plot(sample,x)
+l2,=ax.plot(sample,y)
+l3,=ax.plot(sample,z)
 ax.set_xlabel('timestamp')
-
 ax.set_ylabel('acc value')
-
 ax.legend((l1,l2,l3),('X','Y','Z'))
-
-
 plt.show()
 
 s.close()
-#print("rc: " + str(rc))
